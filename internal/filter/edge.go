@@ -1,7 +1,6 @@
 package filter
 
 import (
-	"image/color"
 	"math"
 
 	"bib.de/img_proc/internal/utils"
@@ -9,13 +8,12 @@ import (
 
 type EdgeFilter struct{}
 
-func (filter *EdgeFilter) Convert(values [5]color.RGBA, isSet [5]bool, filterValues FilterValues) (new color.RGBA) {
+func (filter *EdgeFilter) Convert(filterValues *FilterValues) {
 
 	i := uint8(
 		math.Min(255,
-			math.Abs(utils.Intensity(values[1])-utils.Intensity(values[3]))+
-				math.Abs(utils.Intensity(values[2])-utils.Intensity(values[4]))))
-	new.A = 255
-	new.R, new.G, new.B = i, i, i
-	return
+			math.Abs(utils.Intensity(filterValues.RGBAValues[1])-utils.Intensity(filterValues.RGBAValues[3]))+
+				math.Abs(utils.Intensity(filterValues.RGBAValues[2])-utils.Intensity(filterValues.RGBAValues[4]))))
+	filterValues.NewRGBAValue.A = 255
+	filterValues.NewRGBAValue.R, filterValues.NewRGBAValue.G, filterValues.NewRGBAValue.B = i, i, i
 }

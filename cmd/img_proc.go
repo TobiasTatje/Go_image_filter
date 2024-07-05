@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"bib.de/img_proc/internal/engine"
-	filter "bib.de/img_proc/internal/filter"
+	"bib.de/img_proc/internal/filter"
 	"bib.de/img_proc/internal/io"
 )
 
@@ -64,15 +64,14 @@ func filterHelpMsg() (output string) {
 
 func checkFilterFlag(flags []string) bool {
 	c := 0
-
 	for _, flag := range flags {
 		for _, f := range filter.FilterDefs {
 			if f.Flag == flag {
 				c++
+				continue
 			}
 		}
 	}
-
 	return c == len(flags)
 }
 

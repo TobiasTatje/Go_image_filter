@@ -1,32 +1,27 @@
 package filter
 
-import (
-	"image/color"
-)
-
 type BlurFilter struct{}
 
-func (filter *BlurFilter) Convert(values [5]color.RGBA, isSet [5]bool, filterValues FilterValues) (new color.RGBA) {
+func (filter *BlurFilter) Convert(filterValues *FilterValues) {
 	var div int64
-	for i := 0; i < len(isSet); i++ {
-		if isSet[i] {
+	for i := 0; i < len(filterValues.IsValueSet); i++ {
+		if filterValues.IsValueSet[i] {
 			div++
 		}
 	}
 
 	var R, G, B, A int64
 
-	for i := 0; i < len(values); i++ {
-		R += int64(values[i].R)
-		G += int64(values[i].G)
-		B += int64(values[i].B)
+	for i := 0; i < len(filterValues.RGBAValues); i++ {
+		R += int64(filterValues.RGBAValues[i].R)
+		G += int64(filterValues.RGBAValues[i].G)
+		B += int64(filterValues.RGBAValues[i].B)
 	}
 
 	A = 255
 
-	new.R = uint8(R / div)
-	new.G = uint8(G / div)
-	new.B = uint8(B / div)
-	new.A = uint8(A)
-	return
+	filterValues.NewRGBAValue.R = uint8(R / div)
+	filterValues.NewRGBAValue.G = uint8(G / div)
+	filterValues.NewRGBAValue.B = uint8(B / div)
+	filterValues.NewRGBAValue.A = uint8(A)
 }

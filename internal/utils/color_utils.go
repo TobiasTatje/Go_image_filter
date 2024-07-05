@@ -33,3 +33,22 @@ func spotColor(r, d int, c uint8) uint8 {
 
 	return uint8(int(c) - int(float32(c)*i))
 }
+
+func RadixRgba(c []color.RGBA) []color.RGBA {
+	var n0, n1 []color.RGBA
+	comparator := 0b1
+	for range 8 * 3 {
+		for j := range len(c) {
+			val := uint(c[j].R) | uint(c[j].G)<<8 | uint(c[j].B)<<16
+			if uint(comparator)&(val) == 0 {
+				n0 = append(n0, c[j])
+			} else {
+				n1 = append(n1, c[j])
+			}
+		}
+		c = append(n0, n1...)
+		n0, n1 = n0[:0], n1[:0]
+		comparator <<= 1
+	}
+	return c
+}

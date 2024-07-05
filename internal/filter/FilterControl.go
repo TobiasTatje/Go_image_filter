@@ -1,5 +1,7 @@
 package filter
 
+import "image/color"
+
 type FilterDef struct {
 	Name   string
 	Flag   string
@@ -11,14 +13,19 @@ type FilterValues struct {
 	NeedImgBounds      bool
 	W, H               int64 //Width and Height of img. NEEDS TO BE SET AT RUNTIME!
 	UsingPosition      bool
-	X_Offset, Y_Offset int64 // Origin transformation of Filter position from middle, and radius of filter
+	X_Offset, Y_Offset int64 //Origin transformation of Filter position from middle, and radius of filter
 	X, Y               int64 //Current position in image
 	UsingRadius        bool
-	RadInPercent       bool  // If radius shall be measured in percent of smallest picture
-	Rad                int64 // Radius of filter
-	RPercent           uint8 // Radius in percent.
+	RadInPercent       bool  //If radius shall be measured in percent of smallest picture
+	Rad                int64 //Radius of filter
+	RPercent           uint8 //Radius in percent.
 	I                  uint8 //IterationCount
 	UsingNeighbors     bool  //considering neighbors
+	RGBAValues         [5]color.RGBA
+	IsValueSet         [5]bool
+	NewRGBAValue       color.RGBA
+	UsingEntireRow     bool
+	Row                []color.RGBA
 }
 
 var FilterDefs = []FilterDef{
@@ -28,6 +35,7 @@ var FilterDefs = []FilterDef{
 	{"edge", "e", &EdgeFilter{}, defEdgeVal()},
 	{"invert", "i", &InvertFilter{}, defInvertVal()},
 	{"spot", "s", &SpotFilter{}, defSpotVal()},
+	{"rowSort", "rs", &SortRowFilter{}, defSortRowFilter()},
 }
 
 //Functions for default Values, change as needed
@@ -65,6 +73,13 @@ func defSpotVal() (fv FilterValues) {
 	fv.UsingRadius = true
 	fv.RadInPercent = true
 	fv.RPercent = 60
+	return
+}
+
+func defSortRowFilter() (fv FilterValues) {
+	defaultIterations(&fv)
+	setNoNeighbors(&fv)
+	fv.UsingEntireRow = true
 	return
 }
 

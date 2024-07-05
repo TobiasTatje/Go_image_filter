@@ -16,36 +16,46 @@ func sectorIterate(o_img image.Image, n_img *image.RGBA, s, sec_h int, wg *sync.
 
 	b := o_img.Bounds()
 
-	var values [5]color.RGBA
-	var isSet [5]bool
+	for y := s * sec_h; y < int(math.Min(float64((s+1)*sec_h), float64(b.Max.Y))); y++ {
+		if !filterDefs.Values.UsingEntireRow {
+			for x := b.Min.X; x < b.Max.X; x++ {
+				filterDefs.Values.IsValueSet[0] = true
+				filterDefs.Values.RGBAValues[0] = o_img.At(x, y).(color.RGBA)
 
-	for x := b.Min.X; x < b.Max.X; x++ {
-		for y := s * sec_h; y < int(math.Min(float64((s+1)*sec_h), float64(b.Max.Y))); y++ {
-			isSet[0] = true
-			values[0] = o_img.At(x, y).(color.RGBA)
+				filterDefs.Values.X = int64(x)
+				filterDefs.Values.Y = int64(y)
 
-			filterDefs.Values.X = int64(x)
-			filterDefs.Values.Y = int64(y)
-
-			if filterDefs.Values.UsingNeighbors {
-				if x > b.Min.X {
-					isSet[1] = true
-					values[1] = o_img.At(x-1, y).(color.RGBA)
+				if filterDefs.Values.UsingNeighbors {
+					if x > b.Min.X {
+						filterDefs.Values.IsValueSet[1] = true
+						filterDefs.Values.RGBAValues[1] = o_img.At(x-1, y).(color.RGBA)
+					}
+					if y < b.Max.Y {
+						filterDefs.Values.IsValueSet[2] = true
+						filterDefs.Values.RGBAValues[2] = o_img.At(x, y+1).(color.RGBA)
+					}
+					if x < b.Max.X {
+						filterDefs.Values.IsValueSet[3] = true
+						filterDefs.Values.RGBAValues[3] = o_img.At(x+1, y).(color.RGBA)
+					}
+					if y > b.Min.Y {
+						filterDefs.Values.IsValueSet[4] = true
+						filterDefs.Values.RGBAValues[4] = o_img.At(x, y-1).(color.RGBA)
+					}
 				}
-				if y < b.Max.Y {
-					isSet[2] = true
-					values[2] = o_img.At(x, y+1).(color.RGBA)
-				}
-				if x < b.Max.X {
-					isSet[3] = true
-					values[3] = o_img.At(x+1, y).(color.RGBA)
-				}
-				if y > b.Min.Y {
-					isSet[4] = true
-					values[4] = o_img.At(x, y-1).(color.RGBA)
-				}
+				filterDefs.Filter.Convert(&filterDefs.Values)
+				n_img.SetRGBA(x, y, filterDefs.Values.NewRGBAValue)
 			}
-			n_img.SetRGBA(x, y, filterDefs.Filter.Convert(values, isSet, filterDefs.Values))
+		} else {
+			var rgbaValues []color.RGBA
+			for x := b.Min.X; x < b.Max.X; x++ {
+				rgbaValues = append(rgbaValues, o_img.At(x, y).(color.RGBA))
+			}
+			filterDefs.Values.Row = rgbaValues
+			filterDefs.Filter.Convert(&filterDefs.Values)
+			for x := b.Min.X; x < b.Max.X; x++ {
+				n_img.SetRGBA(x, y, filterDefs.Values.Row[x])
+			}
 		}
 	}
 }
@@ -81,8 +91,9 @@ func Iterate(o_img image.Image, filter filter.FilterDef, threadCount int) image.
 
 		n_img := image.NewRGBA(image.Rect(b.Min.X, b.Min.Y, b.Max.X, b.Max.Y))
 
+		wg.Add(threadCount)
+
 		for j := range threadCount {
-			wg.Add(1)
 			go sectorIterate(o_img, n_img, j, sec_h, &wg, filter)
 		}
 
