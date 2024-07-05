@@ -34,7 +34,7 @@ func spotColor(r, d int, c uint8) uint8 {
 	return uint8(int(c) - int(float32(c)*i))
 }
 
-func RadixRgba(c []color.RGBA) []color.RGBA {
+func RadixRgb(c []color.RGBA) []color.RGBA {
 	var n0, n1 []color.RGBA
 	comparator := 0b1
 	for range 8 * 3 {

@@ -7,5 +7,5 @@ import (
 type SortRowFilter struct{}
 
 func (filter *SortRowFilter) Convert(filterValues *FilterValues) {
-	filterValues.Row = utils.RadixRgba(filterValues.Row)
+	filterValues.Row = utils.RadixRgb(filterValues.Row)
 }
