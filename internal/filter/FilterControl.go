@@ -35,7 +35,7 @@ var FilterDefs = []FilterDef{
 	{"edge", "e", &EdgeFilter{}, defEdgeVal()},
 	{"invert", "i", &InvertFilter{}, defInvertVal()},
 	{"spot", "s", &SpotFilter{}, defSpotVal()},
-	{"rowSort", "rs", &SortRowFilter{}, defSortRowFilter()},
+	{"sortRow", "sr", &SortRowFilter{}, defSortRowFilter()},
 }
 
 //Functions for default Values, change as needed
