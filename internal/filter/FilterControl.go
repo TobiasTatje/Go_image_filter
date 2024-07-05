@@ -16,16 +16,16 @@ type FilterValues struct {
 	X_Offset, Y_Offset int64 //Origin transformation of Filter position from middle, and radius of filter
 	X, Y               int64 //Current position in image
 	UsingRadius        bool
-	RadInPercent       bool  //If radius shall be measured in percent of smallest picture
-	Rad                int64 //Radius of filter
-	RPercent           uint8 //Radius in percent.
-	I                  uint8 //IterationCount
-	UsingNeighbors     bool  //considering neighbors
-	RGBAValues         [5]color.RGBA
-	IsValueSet         [5]bool
-	NewRGBAValue       color.RGBA
-	UsingEntireRow     bool
-	Row                []color.RGBA
+	RadInPercent       bool          //If radius shall be measured in percent of smallest picture
+	Rad                int64         //Radius of filter
+	RPercent           uint8         //Radius in percent.
+	I                  uint8         //IterationCount
+	UsingNeighbors     bool          //considering neighbors
+	RGBAValues         [5]color.RGBA //Values of current, above, right, under and left pixel, in that order
+	IsValueSet         [5]bool       //If Value is actually set. Needed Since null values are not possible, and 0 initialized values in Calculations are not desired
+	NewRGBAValue       color.RGBA	 
+	UsingEntireRow     bool			 //If filter uses the entire row instead of one pixels and neighbors
+	Row                []color.RGBA  
 }
 
 var FilterDefs = []FilterDef{
