@@ -52,3 +52,17 @@ func RadixRgb(c []color.RGBA) []color.RGBA {
 	}
 	return c
 }
+
+func AvgRgb(row []color.RGBA) (c color.RGBA) {
+	var R, G, B int
+	for i := range row {
+		R += int(row[i].R)
+		G += int(row[i].G)
+		B += int(row[i].B)
+	}
+	c.R = uint8(R / len(row))
+	c.G = uint8(G / len(row))
+	c.B = uint8(B / len(row))
+	c.A = 255
+	return
+}

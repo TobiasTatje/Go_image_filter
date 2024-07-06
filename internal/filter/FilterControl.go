@@ -36,6 +36,7 @@ var FilterDefs = []FilterDef{
 	{"invert", "i", &InvertFilter{}, defInvertVal()},
 	{"spot", "s", &SpotFilter{}, defSpotVal()},
 	{"sortRow", "sr", &SortRowFilter{}, defSortRowFilter()},
+	{"averageRow", "ar", &AvgRowFilter{}, defAvgRowFilter()},
 }
 
 //Functions for default Values, change as needed
@@ -77,6 +78,13 @@ func defSpotVal() (fv FilterValues) {
 }
 
 func defSortRowFilter() (fv FilterValues) {
+	defaultIterations(&fv)
+	setNoNeighbors(&fv)
+	fv.UsingEntireRow = true
+	return
+}
+
+func defAvgRowFilter() (fv FilterValues) {
 	defaultIterations(&fv)
 	setNoNeighbors(&fv)
 	fv.UsingEntireRow = true
