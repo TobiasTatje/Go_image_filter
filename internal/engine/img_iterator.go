@@ -49,7 +49,11 @@ func Iterate(o_img image.Image, filter filter.FilterDef, threadCount int) image.
 
 	sec_h := int64(math.Ceil(float64(filter.Values.Bounds.Max.Y-filter.Values.Bounds.Min.Y) / float64(threadCount)))
 
-	for i := 1; i <= int(filter.Values.I); i++ {
+	maxI := filter.Values.I
+	if !filter.Values.UseIteration {
+		maxI = 1
+	}
+	for i := 1; i <= int(maxI); i++ {
 		filter.Values.CurrentI = uint8(i)
 		n_img := image.NewRGBA(image.Rect(
 			filter.Values.Bounds.Min.X,
@@ -65,5 +69,6 @@ func Iterate(o_img image.Image, filter filter.FilterDef, threadCount int) image.
 		wg.Wait()
 		filter.Values.RefOldImg = filter.Values.RefNewImg
 	}
+
 	return filter.Values.RefOldImg
 }

@@ -21,6 +21,7 @@ type FilterValues struct {
 	RadInPercent       bool  //If radius shall be measured in percent of smallest picture
 	Rad                int64 //Radius of filter
 	RPercent           uint8 //Radius in percent
+	UseIteration       bool  //if the filter shall use iterations
 	I                  uint8 //Iterations
 	CurrentI           uint8
 	UsingEntireRow     bool //If filter uses the entire row instead of one pixels and neighbors
@@ -44,32 +45,28 @@ var FilterDefs = []FilterDef{
 //Functions for default Values, change as needed
 
 func defBlurVal() (fv FilterValues) {
+	fv.UseIteration = true
 	fv.I = 10
 	return
 }
 
 func defComicVal() (fv FilterValues) {
-	defaultIterations(&fv)
 	return
 }
 
 func defHeatVal() (fv FilterValues) {
-	defaultIterations(&fv)
 	return
 }
 
 func defEdgeVal() (fv FilterValues) {
-	defaultIterations(&fv)
 	return
 }
 
 func defInvertVal() (fv FilterValues) {
-	defaultIterations(&fv)
 	return
 }
 
 func defSpotVal() (fv FilterValues) {
-	defaultIterations(&fv)
 	fv.UsingRadius = true
 	fv.RadInPercent = true
 	fv.RPercent = 60
@@ -77,22 +74,17 @@ func defSpotVal() (fv FilterValues) {
 }
 
 func defSortRowFilter() (fv FilterValues) {
-	defaultIterations(&fv)
 	fv.UsingEntireRow = true
 	return
 }
 
 func defAvgRowFilter() (fv FilterValues) {
-	defaultIterations(&fv)
 	fv.UsingEntireRow = true
 	return
 }
 
 func defPixelFilter() (fv FilterValues) {
+	fv.UseIteration = true
 	fv.I = 10
 	return
-}
-
-func defaultIterations(fv *FilterValues) {
-	fv.I = 1
 }
