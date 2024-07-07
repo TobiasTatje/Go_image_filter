@@ -21,7 +21,7 @@ type FilterValues struct {
 	RadInPercent       bool  //If radius shall be measured in percent of smallest picture
 	Rad                int64 //Radius of filter
 	RPercent           uint8 //Radius in percent
-	I                  uint8 //IterationCount
+	I                  uint8 //Iterations
 	CurrentI           uint8
 	UsingEntireRow     bool //If filter uses the entire row instead of one pixels and neighbors
 	Row                []color.RGBA
