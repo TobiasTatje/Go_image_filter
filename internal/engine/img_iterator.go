@@ -54,7 +54,6 @@ func Iterate(o_img image.Image, filter filter.FilterDef, threadCount int) image.
 		maxI = 1
 	}
 	for i := 1; i <= int(maxI); i++ {
-		filter.Values.CurrentI = uint8(i)
 		n_img := image.NewRGBA(image.Rect(
 			filter.Values.Bounds.Min.X,
 			filter.Values.Bounds.Min.Y,
