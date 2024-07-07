@@ -16,7 +16,7 @@ import (
 )
 
 var helpFlag = flag.Bool("h", false, "display flag help")
-var pictureFlag = flag.String("p", "[name].png", "Name of the picture")
+var pictureFlag = flag.String("p", "[relative path][name].png", "Relative path to the picture Ex: '.\\res\\temp.png'")
 var filterFlag = flag.String("f", "", "to be applied Filter(s). Can be chained with \",\".\nPossible Values are: \n"+filterHelpMsg())
 var iterationFlag = flag.Int("i", -1, "Number of iterations of Applying. If not specified filter default values will be used")
 var threadFlag = flag.Int("t", -1, "Number of threads to be used for converting. If not specified, uses max available Cores of the System.")
