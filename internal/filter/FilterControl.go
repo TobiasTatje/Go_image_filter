@@ -84,7 +84,7 @@ func defAvgRowFilter() (fv FilterValues) {
 }
 
 func defPixelFilter() (fv FilterValues) {
-	fv.UseIteration = true
+	fv.UseIteration = false
 	fv.I = 10
 	return
 }
