@@ -22,8 +22,8 @@ type FilterValues struct {
 	Rad                int64 //Radius of filter
 	RPercent           uint8 //Radius in percent
 	I                  uint8 //IterationCount
-	UsingNeighbors     bool  //considering neighbors
-	UsingEntireRow     bool  //If filter uses the entire row instead of one pixels and neighbors
+	CurrentI           uint8
+	UsingEntireRow     bool //If filter uses the entire row instead of one pixels and neighbors
 	Row                []color.RGBA
 	RefNewImg          *image.RGBA
 	RefOldImg          image.Image
@@ -38,13 +38,13 @@ var FilterDefs = []FilterDef{
 	{"spot", "s", &SpotFilter{}, defSpotVal()},
 	{"sortRow", "sr", &SortRowFilter{}, defSortRowFilter()},
 	{"averageRow", "ar", &AvgRowFilter{}, defAvgRowFilter()},
+	{"pixel", "p", &PixelFilter{}, defPixelFilter()},
 }
 
 //Functions for default Values, change as needed
 
 func defBlurVal() (fv FilterValues) {
 	fv.I = 10
-	setNoNeighbors(&fv)
 	return
 }
 
@@ -60,7 +60,6 @@ func defHeatVal() (fv FilterValues) {
 
 func defEdgeVal() (fv FilterValues) {
 	defaultIterations(&fv)
-	setNoNeighbors(&fv)
 	return
 }
 
@@ -79,20 +78,19 @@ func defSpotVal() (fv FilterValues) {
 
 func defSortRowFilter() (fv FilterValues) {
 	defaultIterations(&fv)
-	setNoNeighbors(&fv)
 	fv.UsingEntireRow = true
 	return
 }
 
 func defAvgRowFilter() (fv FilterValues) {
 	defaultIterations(&fv)
-	setNoNeighbors(&fv)
 	fv.UsingEntireRow = true
 	return
 }
 
-func setNoNeighbors(fv *FilterValues) {
-	fv.UsingNeighbors = true
+func defPixelFilter() (fv FilterValues) {
+	fv.I = 10
+	return
 }
 
 func defaultIterations(fv *FilterValues) {
