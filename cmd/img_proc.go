@@ -15,11 +15,11 @@ import (
 	"bib.de/img_proc/internal/io"
 )
 
-var helpFlag = flag.Bool("h", false, "display flag help")
-var pictureFlag = flag.String("p", "[relative path][name].png", "Relative path to the picture Ex: '.\\res\\temp.png'")
-var filterFlag = flag.String("f", "", "to be applied Filter(s). Can be chained with \",\".\nPossible Values are: \n"+filterHelpMsg())
-var iterationFlag = flag.Int("i", -1, "Number of iterations of Applying. If not specified filter default values will be used")
-var threadFlag = flag.Int("t", -1, "Number of threads to be used for converting. If not specified, uses max available Cores of the System.")
+var helpFlag = flag.Bool("h", false, "Display flag help")
+var pictureFlag = flag.String("p", "", "Relative path to the picture. Ex: '.\\res\\temp.png'")
+var filterFlag = flag.String("f", "", "To be applied Filter(s). Can be chained with \",\".\nPossible Values are: \n"+filterHelpMsg())
+var iterationFlag = flag.Int("i", -1, "Number of iterations (Increase for stronger effect of filter). If not specified filter default values will be used")
+var threadFlag = flag.Int("t", -1, "Number of threads to be used for converting. If not specified, uses maximum available cores of the System.")
 var radiusFlag = flag.Int("r", -1, "Radius in pixel from the middle of image")
 var radiusPercentFlag = flag.Int("rp,", -1, "Radius in percent of the smallest side of the image")
 var coordsOffsetFlag = flag.String("o", "0,0", "Offset in Pixel from the middle of picture. Usage: x,y")
