@@ -1,24 +1,28 @@
 package filter
 
 import (
+	"image/color"
+
 	"bib.de/img_proc/internal/utils"
 )
 
 type ComicFilter struct{}
 
-func (filter *ComicFilter) Convert(filterValues *FilterValues) {
-	i := utils.Intensity(filterValues.RGBAValues[0])
-	filterValues.NewRGBAValue.A = 255
+func (filter *ComicFilter) Convert(fv *FilterValues) {
+	i := utils.Intensity(fv.RefOldImg.At(int(fv.X), int(fv.Y)).(color.RGBA))
+	var np color.RGBA
+	np.A = 255
 	if i <= 85 {
-		filterValues.NewRGBAValue.R = 42
-		filterValues.NewRGBAValue.G, filterValues.NewRGBAValue.B = filterValues.NewRGBAValue.R, filterValues.NewRGBAValue.R
+		np.R = 42
+		np.G, np.B = np.R, np.R
 		return
 	}
 	if i <= 170 {
-		filterValues.NewRGBAValue.R = 128
-		filterValues.NewRGBAValue.G, filterValues.NewRGBAValue.B = filterValues.NewRGBAValue.R, filterValues.NewRGBAValue.R
+		np.R = 128
+		np.G, np.B = np.R, np.R
 		return
 	}
-	filterValues.NewRGBAValue.R = 212
-	filterValues.NewRGBAValue.G, filterValues.NewRGBAValue.B = filterValues.NewRGBAValue.R, filterValues.NewRGBAValue.R
+	np.R = 212
+	np.G, np.B = np.R, np.R
+	fv.RefNewImg.SetRGBA(int(fv.X), int(fv.Y), np)
 }

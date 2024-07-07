@@ -1,8 +1,13 @@
 package filter
 
+import "image/color"
+
 type InvertFilter struct{}
 
-func (filter *InvertFilter) Convert(filterValues *FilterValues) {
-	filterValues.NewRGBAValue.A = 255
-	filterValues.NewRGBAValue.R, filterValues.NewRGBAValue.G, filterValues.NewRGBAValue.B = 255-filterValues.RGBAValues[0].R, 255-filterValues.RGBAValues[0].G, 255-filterValues.RGBAValues[0].B
+func (filter *InvertFilter) Convert(fv *FilterValues) {
+	var np color.RGBA
+	np.A = 255
+	p := fv.RefOldImg.At(int(fv.X), int(fv.Y)).(color.RGBA)
+	np.R, np.G, np.B = 255-p.R, 255-p.G, 255-p.B
+	fv.RefNewImg.SetRGBA(int(fv.X), int(fv.Y), np)
 }

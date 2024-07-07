@@ -1,6 +1,9 @@
 package filter
 
-import "image/color"
+import (
+	"image"
+	"image/color"
+)
 
 type FilterDef struct {
 	Name   string
@@ -10,22 +13,20 @@ type FilterDef struct {
 }
 
 type FilterValues struct {
-	NeedImgBounds      bool
-	W, H               int64 //Width and Height of img. NEEDS TO BE SET AT RUNTIME!
+	Bounds             image.Rectangle
 	UsingPosition      bool
 	X_Offset, Y_Offset int64 //Origin transformation of Filter position from middle, and radius of filter
 	X, Y               int64 //Current position in image
 	UsingRadius        bool
-	RadInPercent       bool          //If radius shall be measured in percent of smallest picture
-	Rad                int64         //Radius of filter
-	RPercent           uint8         //Radius in percent
-	I                  uint8         //IterationCount
-	UsingNeighbors     bool          //considering neighbors
-	RGBAValues         [5]color.RGBA //Values of current, above, right, under and left pixel, in that order
-	IsValueSet         [5]bool       //If Value is actually set. Needed Since null values are not possible, and 0 initialized values in Calculations are not desired
-	NewRGBAValue       color.RGBA
-	UsingEntireRow     bool //If filter uses the entire row instead of one pixels and neighbors
+	RadInPercent       bool  //If radius shall be measured in percent of smallest picture
+	Rad                int64 //Radius of filter
+	RPercent           uint8 //Radius in percent
+	I                  uint8 //IterationCount
+	UsingNeighbors     bool  //considering neighbors
+	UsingEntireRow     bool  //If filter uses the entire row instead of one pixels and neighbors
 	Row                []color.RGBA
+	RefNewImg          *image.RGBA
+	RefOldImg          image.Image
 }
 
 var FilterDefs = []FilterDef{
@@ -70,7 +71,6 @@ func defInvertVal() (fv FilterValues) {
 
 func defSpotVal() (fv FilterValues) {
 	defaultIterations(&fv)
-	fv.NeedImgBounds = true
 	fv.UsingRadius = true
 	fv.RadInPercent = true
 	fv.RPercent = 60
