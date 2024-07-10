@@ -19,6 +19,8 @@ The `-f` flag is used to specify filters to be applied. Filters can be chained t
 -   `i` : invert
 -   `s` : spot
 -   `rs` : rowSort
+-   `ar` : avarageRow
+-   `p` : pixel
 
 ### Flags
 
